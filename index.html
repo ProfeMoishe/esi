@@ -1,0 +1,680 @@
+Conversación abierta. 5 mensajes, todos leídos.
+
+Ir al contenido
+Cómo usar Gmail con lectores de pantalla
+13 de 154
+Carreras nivel superior
+Recibidos
+
+moises tinte
+mar, 18 nov, 3:51 p.m. (hace 2 días)
+https://prensa.cba.gov.ar/educacion-3/abren-las-preinscripciones-para-educacion-superior-2026/
+2
+
+moises tinte
+Archivos adjuntos
+mié, 19 nov, 1:41 p.m. (hace 19 horas)
+para mí
+
+Parece que este mensaje está en inglés
+adjunto
+ Un archivo adjunto
+  •  Analizado por Gmail
+
+moises tinte
+mié, 19 nov, 1:52 p.m. (hace 19 horas)
+para mí
+
+Parece que este mensaje está en inglés
+https://docs.google.com/document/d/1G4OlPrvvOSudqBZGZ0F5PyZ0IyfLtu2Eg0YxXOdBnBU/edit?usp=sharing
+
+
+script :
+
+
+function crearFormularioTecnicatura() {
+  var form = FormApp.create('Evaluación y Elaboración de Currículum
+Basado en Competencias – 7° J – Tecnicatura en Programación');
+
+  // Descripción general
+  form.setDescription("Formulario para evaluar la formación adquirida
+en la Tecnicatura en Programación del IPET 247 Cassaffousth. Responde
+con detalle para la construcción de tu Currículum Profesional.");
+
+  // SECCIÓN: Datos Personales
+  form.addSectionHeaderItem().setTitle("Datos Personales");
+  form.addTextItem().setTitle("Nombre Completo").setRequired(true);
+  form.addTextItem().setTitle("Curso").setHelpText("Ejemplo: 7°
+J").setRequired(true);
+  form.addTextItem().setTitle("Correo Electrónico").setRequired(true);
+
+  // Lista de materias
+  var materias = [
+    "Informática Aplicada I", "Lógica Matemática", "Programación I",
+    "Informática Aplicada II", "Sistemas de Información", "Programación II",
+    "Base de Datos I", "Sistemas y Telecomunicaciones", "Programación III",
+    "Base de Datos II", "Laboratorio de Informática", "Aplicación de
+Nuevas Tecnologías"
+  ];
+
+  // SECCIÓN: Evaluación de Materias
+  form.addSectionHeaderItem().setTitle("Sección 1 – Evaluación de
+Materias (FTE)");
+
+  form.addListItem()
+    .setTitle("¿Qué materia estás evaluando?")
+    .setChoiceValues(materias)
+    .setRequired(true);
+
+  var preguntasMaterias = [
+    "¿Cuál fue el tema principal de esta materia?",
+    "¿Qué habilidades específicas adquiriste en esta materia?",
+    "Menciona un proyecto o tarea que te ayudó a entender mejor el contenido.",
+    "¿Cómo aplicarías este conocimiento en un entorno profesional?",
+    "¿Qué conceptos o habilidades encontraste más desafiantes?",
+    "¿Cómo superaste estos desafíos?",
+    "¿Qué herramientas o tecnologías específicas aprendiste a utilizar?",
+    "¿De qué manera esta materia contribuyó a tu desarrollo como
+técnico en informática?",
+    "¿Qué mejorarías en el dictado de esta materia? (contenido,
+tiempo, metodologías, etc.)",
+    "¿Consideras que el tiempo dedicado fue suficiente? ¿Por qué?",
+    "¿Qué recursos adicionales (libros, software, etc.) recomendarías
+para esta materia?",
+    "¿Qué sugerencias aportarías para mejorar la enseñanza?"
+  ];
+
+  preguntasMaterias.forEach(function(p){
+    form.addParagraphTextItem().setTitle(p).setRequired(true);
+  });
+
+  // SECCIÓN: Intereses y habilidades
+  form.addSectionHeaderItem().setTitle("Sección 2 – Intereses
+Personales y Habilidades");
+  var preguntasIntereses = [
+    "¿Qué área de la informática te interesa más?",
+    "¿Has realizado cursos o autoaprendizaje? Detalla.",
+    "¿Qué habilidades blandas (trabajo en equipo, comunicación, etc.)
+has desarrollado?",
+    "¿Qué habilidades técnicas te gustaría aprender o mejorar?",
+    "¿Tienes algún proyecto personal o freelance relacionado con la
+informática? Descríbelo.",
+    "¿Qué certificaciones o cursos adicionales te gustaría realizar?",
+    "¿Cuáles son tus objetivos profesionales a corto y largo plazo?"
+  ];
+  preguntasIntereses.forEach(function(p){
+    form.addParagraphTextItem().setTitle(p).setRequired(true);
+  });
+
+  // SECCIÓN: Futuro Profesional
+  form.addSectionHeaderItem().setTitle("Sección 3 – Proyección
+Profesional y Educativa");
+  var preguntasProyeccion = [
+    "¿Qué tipo de trabajo te gustaría obtener al finalizar la tecnicatura?",
+    "¿Estás interesado en continuar tus estudios en informática? Explica.",
+    "¿Cómo planeas mantenerte actualizado con avances tecnológicos?",
+    "¿Qué aspectos del trabajo en informática te motivan más?",
+    "¿En qué tipo de empresa o sector te gustaría trabajar?",
+    "¿Te interesa el trabajo freelance o emprender un negocio propio? Explica."
+  ];
+  preguntasProyeccion.forEach(function(p){
+    form.addParagraphTextItem().setTitle(p).setRequired(true);
+  });
+
+  Logger.log("Formulario creado: " + form.getEditUrl());
+}
+
+El mié, 19 nov 2025 a las 13:45, moises tinte
+(<moisestinte@gmail.com>) escribió:
+ Un archivo adjunto
+  •  Analizado por Gmail
+
+
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolo de Actuación ante Acoso Virtual - IPET N° 249</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .navbar {
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card {
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .protocol-step {
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact-card {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+            z-index: 1000;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: var(--secondary-color);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.4rem;
+            top: 0.5rem;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            border: 3px solid white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-shield-check"></i> Protocolo ESI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#introduccion">Introducción</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#marco-legal">Marco Legal</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#protocolo-institucional">Protocolo Institucional</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#protocolo-estudiantes">Para Estudiantes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#plan-trabajo">Plan de Trabajo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contactos">Contactos</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold">Protocolo de Actuación ante Acoso Virtual</h1>
+            <p class="lead">IPET N° 249 Nicolás Copérnico, Córdoba Capital</p>
+            <p>Una respuesta integral basada en la Educación Sexual Integral (ESI)</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Introducción -->
+        <section id="introduccion" class="mb-5">
+            <h2 class="section-title">Introducción y Contexto</h2>
+            <div class="row">
+                <div class="col-lg-8">
+                    <p>El IPET Nº 249 Nicolás Copérnico es una escuela técnica ubicada en Córdoba Capital con aproximadamente 1200 estudiantes que provienen de <strong>contextos socioeconómicos diversos</strong>. Esta pluralidad demanda una atención integral a las problemáticas que afectan a la comunidad educativa.</p>
+                    <p>La ausencia de un protocolo claro y formalizado para la detección, intervención y seguimiento de casos de acoso virtual ha generado preocupación e incertidumbre. Por ello, el desarrollo de este Proyecto Protocolo de Acción ante Acoso Virtual se basa en un marco <strong>legal y pedagógico</strong> que busca garantizar una <strong>respuesta integral y eficaz</strong> ante la problemática del ciberacoso.</p>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-info-circle"></i> Datos Importantes</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>Institución:</strong> IPET N° 249</li>
+                                <li><strong>Ubicación:</strong> Córdoba Capital</li>
+                                <li><strong>Estudiantes:</strong> ~1200</li>
+                                <li><strong>Enfoque:</strong> Educación Sexual Integral</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Marco Legal -->
+        <section id="marco-legal" class="mb-5">
+            <h2 class="section-title">Marco Legal y Pedagógico</h2>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Marco Nacional</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul>
+                                <li><strong>Ley 26.061:</strong> Protección Integral de Derechos de NNyA</li>
+                                <li><strong>Ley 26.150:</strong> Educación Sexual Integral</li>
+                                <li><strong>Ley 26.485:</strong> Protección Integral a las Mujeres</li>
+                                <li><strong>Ley 26.904:</strong> Delito de Grooming</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Marco Provincial (Córdoba)</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul>
+                                <li><strong>Ley 10.208:</strong> Sistema de Protección Integral</li>
+                                <li><strong>Ley 10.356:</strong> Programa Provincial de Convivencia Escolar</li>
+                                <li><strong>Resolución 150/19:</strong> Protocolo de Intervención</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 class="mt-4">Articulación con la ESI</h3>
+            <div class="row mt-3">
+                <div class="col-md-6 col-lg-3 mb-3">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <i class="bi bi-heart-pulse display-6 text-primary"></i>
+                            <h5 class="card-title mt-2">Cuidar el cuerpo y la salud</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-3">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <i class="bi bi-people display-6 text-primary"></i>
+                            <h5 class="card-title mt-2">Valorar la afectividad</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-3">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <i class="bi bi-gender-ambiguous display-6 text-primary"></i>
+                            <h5 class="card-title mt-2">Garantizar la equidad de género</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-3">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <i class="bi bi-globe display-6 text-primary"></i>
+                            <h5 class="card-title mt-2">Respetar la diversidad</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Protocolo Institucional -->
+        <section id="protocolo-institucional" class="mb-5">
+            <h2 class="section-title">Protocolo de Actuación Institucional</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4>Paso 1: Notificación Obligatoria y Recolección de Evidencia</h4>
+                    <p><strong>Responsable:</strong> Docente/Personal escolar y Equipo Directivo</p>
+                    <ul>
+                        <li>Detección y comunicación interna (dentro de 24 horas)</li>
+                        <li>Registro de evidencia digital</li>
+                        <li>Notificación jurisdiccional (plazo: 72 horas)</li>
+                    </ul>
+                </div>
+                
+                <div class="timeline-item">
+                    <h4>Paso 2: Intervención de la Instancia de Apoyo Jurisdiccional</h4>
+                    <p><strong>Responsable:</strong> Equipos Interdisciplinarios Zonales</p>
+                    <ul>
+                        <li>Evaluación psicosocial del caso</li>
+                        <li>Elaboración de plan de acción</li>
+                        <li>Acta de Compromiso de Convivencia Digital</li>
+                    </ul>
+                </div>
+                
+                <div class="timeline-item">
+                    <h4>Paso 3: Intervención Institucional, Contención y Sanciones</h4>
+                    <p><strong>Responsable:</strong> IPET N° 249</p>
+                    <ul>
+                        <li><strong>Nivel 1 (Leve):</strong> Conversación con estudiantes y familias</li>
+                        <li><strong>Nivel 2 (Moderado/Grave):</strong> Intervención de Equipos Zonales</li>
+                        <li><strong>Derivación Externa:</strong> Para casos graves o delictivos</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Protocolo para Estudiantes -->
+        <section id="protocolo-estudiantes" class="mb-5">
+            <h2 class="section-title">Protocolo de Actuación para Estudiantes Afectados</h2>
+            
+            <div class="accordion" id="protocoloAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#fase1">
+                            Fase 1: Reacción Inmediata y Autoprotección
+                        </button>
+                    </h2>
+                    <div id="fase1" class="accordion-collapse collapse show" data-bs-parent="#protocoloAccordion">
+                        <div class="accordion-body">
+                            <ul>
+                                <li><strong>Decir "No" de Forma Explícita:</strong> Usted tiene el derecho de decir "no" frente a interacciones inadecuadas.</li>
+                                <li><strong>Bloquear y Evitar la Exposición:</strong> Bloquee al agresor y deje de participar en grupos donde se produzca el acoso.</li>
+                                <li><strong>No Guardar Secretos:</strong> No guarde secretos que lo hagan sentir incómodo, mal o confundido.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fase2">
+                            Fase 2: Búsqueda de Ayuda y Denuncia Interna
+                        </button>
+                    </h2>
+                    <div id="fase2" class="accordion-collapse collapse" data-bs-parent="#protocoloAccordion">
+                        <div class="accordion-body">
+                            <ul>
+                                <li><strong>Contactar un Referente de Confianza:</strong> Busque a una persona adulta de la escuela que le inspire confianza.</li>
+                                <li><strong>Verbalizar la Situación:</strong> Ponga en palabras sus sentimientos, necesidades, temores y preocupaciones.</li>
+                                <li><strong>Solicitar Ayuda Formal:</strong> Pida al adulto referente que se active el protocolo institucional.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fase3">
+                            Fase 3: Protección y Confidencialidad
+                        </button>
+                    </h2>
+                    <div id="fase3" class="accordion-collapse collapse" data-bs-parent="#protocoloAccordion">
+                        <div class="accordion-body">
+                            <ul>
+                                <li><strong>Derecho a Ser Oído:</strong> Tiene derecho a ser escuchado y a que su opinión sea tenida en cuenta.</li>
+                                <li><strong>Resguardo de la Intimidad:</strong> Tiene derecho a la protección de su intimidad y confidencialidad.</li>
+                                <li><strong>Preservación de Pruebas Digitales:</strong> Preserve la evidencia digital (capturas de pantalla, mensajes).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fase4">
+                            Fase 4: Recursos Externos de Protección y Asistencia
+                        </button>
+                    </h2>
+                    <div id="fase4" class="accordion-collapse collapse" data-bs-parent="#protocoloAccordion">
+                        <div class="accordion-body">
+                            <ul>
+                                <li><strong>Para Acoso y Violencia de Género:</strong> Línea 144 (contención, orientación e información).</li>
+                                <li><strong>Para Grooming:</strong> Línea Nacional Grooming (0800-222-1717).</li>
+                                <li><strong>Para Asesoramiento en la Comunidad:</strong> Programa "Córdoba Te Escucha" (0800-222-3444).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Plan de Trabajo -->
+        <section id="plan-trabajo" class="mb-5">
+            <h2 class="section-title">Plan de Trabajo</h2>
+            
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">FASE 1: Preparación, Validación y Formalización</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul>
+                                <li>Conformación del Equipo de Referentes ESI</li>
+                                <li>Reunión de Revisión con Especialistas Jurisdiccionales</li>
+                                <li>Definición como Normativa Institucional</li>
+                                <li>Elaboración de Flujograma de Derivación</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">FASE 2: Capacitación Docente y Desarrollo Curricular</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul>
+                                <li>Jornadas de Reflexión "Puerta de Entrada 1"</li>
+                                <li>Capacitación Específica en Protocolo Operativo</li>
+                                <li>Integración Curricular Transversal</li>
+                                <li>Integración de los Ejes de ESI en la Prevención</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-warning text-dark">
+                            <h5 class="mb-0">FASE 3: Comunicación, Concientización y Aplicación</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul>
+                                <li>Comunicación Formal al Personal</li>
+                                <li>Talleres de Sensibilización con Estudiantes</li>
+                                <li>Reuniones con Familias y Búsqueda de Consenso</li>
+                                <li>Ejecución de la Norma (Primer Caso)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-secondary text-white">
+                            <h5 class="mb-0">FASE 4: Evaluación y Revisión Continua</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul>
+                                <li>Monitoreo Curricular Transversal</li>
+                                <li>Seguimiento de Casos y Reporte Periódico</li>
+                                <li>Jornada Anual de Revisión del Protocolo</li>
+                                <li>Fortalecimiento de la Red Intersectorial</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contactos -->
+        <section id="contactos" class="mb-5">
+            <h2 class="section-title">Recursos de Contacto y Derivación</h2>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="contact-card">
+                        <h5><i class="bi bi-telephone-fill text-primary"></i> Línea 144</h5>
+                        <p>Contención, orientación e información en situaciones de violencia por motivos de género (gratuita, 24/7)</p>
+                        <p><strong>Contacto:</strong> 144 / WhatsApp: 1127716463</p>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <h5><i class="bi bi-shield-exclamation text-danger"></i> Línea Nacional Grooming</h5>
+                        <p>Asesoramiento y acompañamiento en denuncia de grooming</p>
+                        <p><strong>Contacto:</strong> 0800-222-1717 / 137</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="contact-card">
+                        <h5><i class="bi bi-bug-fill text-success"></i> Policía de Córdoba - División Cibercrimen</h5>
+                        <p>Denuncia de delitos informáticos</p>
+                        <p><strong>Contacto:</strong> 0800-888-5362 (Opción 3)</p>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <h5><i class="bi bi-chat-dots text-info"></i> Programa "Córdoba Te Escucha"</h5>
+                        <p>Contención y asesoramiento</p>
+                        <p><strong>Contacto:</strong> 0800-222-3444 / WhatsApp: 351-814-1400</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>IPET N° 249 Nicolás Copérnico</h5>
+                    <p>Protocolo de Actuación ante Acoso Virtual</p>
+                    <p>Basado en la Educación Sexual Integral (ESI)</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h5>Enlaces Rápidos</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#introduccion" class="text-light">Introducción</a></li>
+                        <li><a href="#marco-legal" class="text-light">Marco Legal</a></li>
+                        <li><a href="#protocolo-institucional" class="text-light">Protocolo Institucional</a></li>
+                        <li><a href="#protocolo-estudiantes" class="text-light">Para Estudiantes</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4 bg-light">
+            <div class="text-center">
+                <p>&copy; 2025 IPET N° 249 Nicolás Copérnico. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="btn btn-primary back-to-top" id="backToTop">
+        <i class="bi bi-arrow-up"></i>
+    </button>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        // Back to top button
+        const backToTopButton = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.style.display = 'block';
+            } else {
+                backToTopButton.style.display = 'none';
+            }
+        });
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+index.html
+Mostrando index.html
