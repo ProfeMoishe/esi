@@ -1,13 +1,14 @@
 // Pac‑Man mini — single file game logic
-// Usa canvas 320x320, grid 20x20, tile 16px
+// Ajustes: HiDPI canvas scaling, 3 mapas seleccionables
 (() => {
   const canvas = document.getElementById('game');
-  const ctx = canvas.getContext('2d');
+  let ctx = canvas.getContext('2d');
   const scoreEl = document.getElementById('score');
   const statusEl = document.getElementById('status');
   const startBtn = document.getElementById('startBtn');
   const pauseBtn = document.getElementById('pauseBtn');
   const resetBtn = document.getElementById('resetBtn');
+  const mapSelect = document.getElementById('mapSelect');
 
   const TILE = 16;
   const COLS = 20;
@@ -15,35 +16,97 @@
   const W = TILE * COLS;
   const H = TILE * ROWS;
 
-  canvas.width = W;
-  canvas.height = H;
-
-  // simple map: 0 = empty(dot will be placed), 1 = wall
-  // border walls + some internal walls for simple maze
-  const rawMap = [
-    "11111111111111111111",
-    "10000000001100000001",
-    "10111101101101111101",
-    "10000101000001000001",
-    "11110101111101110111",
-    "10000000000000000001",
-    "10111111101111111001",
-    "10000010001000000001",
-    "11111010101101111111",
-    "00001010100010100000",
-    "11111010101101111111",
-    "10000010001000000001",
-    "10111111101111111001",
-    "10000000000000000001",
-    "11110101111101110111",
-    "10000101000001000001",
-    "10111101101101111101",
-    "10000000001100000001",
-    "10000000000000000001",
-    "11111111111111111111"
+  // three different maps (strings of 20x20)
+  const rawMaps = [
+    // Map 1 (original)
+    [
+      "11111111111111111111",
+      "10000000001100000001",
+      "10111101101101111101",
+      "10000101000001000001",
+      "11110101111101110111",
+      "10000000000000000001",
+      "10111111101111111001",
+      "10000010001000000001",
+      "11111010101101111111",
+      "00001010100010100000",
+      "11111010101101111111",
+      "10000010001000000001",
+      "10111111101111111001",
+      "10000000000000000001",
+      "11110101111101110111",
+      "10000101000001000001",
+      "10111101101101111101",
+      "10000000001100000001",
+      "10000000000000000001",
+      "11111111111111111111"
+    ],
+    // Map 2 (more open)
+    [
+      "11111111111111111111",
+      "10000000000000000001",
+      "10111101111101111101",
+      "10000100000001000001",
+      "11110101111101110111",
+      "10000000000000000001",
+      "10111111101111111001",
+      "10000010001000000001",
+      "10111010101101110111",
+      "10001010100010100001",
+      "10111010101101110111",
+      "10000010001000000001",
+      "10111111101111111001",
+      "10000000000000000001",
+      "11110101111101110111",
+      "10000101000001000001",
+      "10111101101101111101",
+      "10000000001100000001",
+      "10000000000000000001",
+      "11111111111111111111"
+    ],
+    // Map 3 (maze alternate)
+    [
+      "11111111111111111111",
+      "10001000100010001001",
+      "10101011101011101001",
+      "10001000000000100001",
+      "11101110111011101111",
+      "10000010001000100001",
+      "10111010101110101101",
+      "10000000000000000001",
+      "11111101111101111111",
+      "10000000001000000001",
+      "11111101111101111111",
+      "10000000000000000001",
+      "10111010101110101101",
+      "10000010001000100001",
+      "11101110111011101111",
+      "10001000000000100001",
+      "10101011101011101001",
+      "10001000100010001001",
+      "10000000000000000001",
+      "11111111111111111111"
+    ]
   ];
 
-  const map = rawMap.map(r => r.split('').map(ch => +ch));
+  let currentMapIndex = parseInt(mapSelect.value || '0', 10);
+  let map = rawMaps[currentMapIndex].map(r => r.split('').map(ch => +ch));
+
+  // HiDPI / resolution fix
+  function setupCanvas() {
+    const DPR = window.devicePixelRatio || 1;
+    // set CSS size (logical pixels)
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    // set actual pixel buffer size
+    canvas.width = Math.floor(W * DPR);
+    canvas.height = Math.floor(H * DPR);
+    ctx = canvas.getContext('2d');
+    // scale drawing operations so 1 unit = 1 logical pixel
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+
+  setupCanvas();
 
   // dots: place where map == 0
   let dots = [];
@@ -56,8 +119,7 @@
       }
     }
     // optionally remove a few to create tunnels
-    dots[9][0] = false;
-    dots[9][19] = false;
+    if (dots[9]) { dots[9][0] = false; dots[9][19] = false; }
   }
 
   // Pacman state
@@ -129,7 +191,15 @@
   let running = false;
   let lastTime = 0;
 
+  function loadMap(index) {
+    currentMapIndex = index;
+    map = rawMaps[currentMapIndex].map(r => r.split('').map(ch => +ch));
+    resetGame();
+  }
+
   function resetGame(){
+    // ensure canvas scaling in case DPR changed
+    setupCanvas();
     resetDots();
     pac.x = 1; pac.y = 1; pac.px = pac.x*TILE+TILE/2; pac.py = pac.y*TILE+TILE/2;
     pac.dir = {x:0,y:0}; pac.nextDir={x:0,y:0}; pac.alive=true; pac.mouth=0;
@@ -143,8 +213,9 @@
 
   function updateScore(){ scoreEl.textContent = String(score); }
 
+  // aligned: both px and py centered in tile
   function aligned(px,py){
-    return Math.abs(px % TILE - TILE/2) < 0.01 || Math.abs(px % TILE - TILE/2) > TILE - 0.01 || Math.abs(py % TILE - TILE/2) < 0.01 || Math.abs(py % TILE - TILE/2) > TILE - 0.01;
+    return Math.abs((px - TILE/2) % TILE) < 0.01 && Math.abs((py - TILE/2) % TILE) < 0.01;
   }
 
   function canMoveTile(tx,ty){
@@ -154,7 +225,7 @@
 
   function attemptTurn(){
     // Only allow turn when centered in tile
-    if (Math.abs((pac.px - TILE/2) % TILE) < 0.01 && Math.abs((pac.py - TILE/2) % TILE) < 0.01){
+    if (aligned(pac.px,pac.py)){
       const nx = pac.x + pac.nextDir.x;
       const ny = pac.y + pac.nextDir.y;
       if (canMoveTile(nx,ny)){
@@ -178,17 +249,12 @@
     const nextPx = pac.px + pac.dir.x * pac.speed;
     const nextPy = pac.py + pac.dir.y * pac.speed;
 
-    const nextTileX = Math.round((nextPx - TILE/2) / TILE);
-    const nextTileY = Math.round((nextPy - TILE/2) / TILE);
-    // compute intended tile coordinates
     const intendedTileX = pac.x + pac.dir.x;
     const intendedTileY = pac.y + pac.dir.y;
     if (pac.dir.x !== 0 || pac.dir.y !== 0){
       // stop if next tile is wall and we would hit it
       if (!canMoveTile(intendedTileX,intendedTileY)){
-        // check if we are close to center; snap to center
-        // don't move across wall
-        // snap px/py to center of current tile
+        // snap to center of current tile
         pac.px = pac.x*TILE + TILE/2;
         pac.py = pac.y*TILE + TILE/2;
         pac.dir = {x:0,y:0};
@@ -345,12 +411,17 @@
     resetGame();
   });
 
+  mapSelect.addEventListener('change', (e)=>{
+    const idx = parseInt(e.target.value, 10) || 0;
+    loadMap(idx);
+  });
+
   function togglePause(){
     running = !running;
     statusEl.textContent = running ? 'Jugando' : 'Pausado';
   }
 
   // init
-  resetGame();
+  loadMap(currentMapIndex);
   requestAnimationFrame(loop);
 })();
