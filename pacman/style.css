@@ -1,0 +1,86 @@
+:root{
+  --bg: #0b0b2b;
+  --wall: #1536a6;
+  --dot: #ffd35a;
+  --pac: #ffd400;
+  --ghost1: #ff5b5b;
+  --ghost2: #5bd6ff;
+  --text: #f0f0f8;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(180deg,#071026, #0f1630);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+
+.wrap{
+  width: 100%;
+  max-width:760px;
+}
+
+h1{
+  margin:0 0 12px;
+  font-size:20px;
+  text-align:center;
+}
+
+.game-frame{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  justify-content:center;
+  background: rgba(255,255,255,0.02);
+  padding:12px;
+  border-radius:10px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+}
+
+canvas{
+  image-rendering: optimizeSpeed;
+  width:320px;
+  height:320px;
+  background: #000;
+  border-radius:6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+}
+
+.hud{
+  min-width:160px;
+  color:var(--text);
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  font-size:14px;
+}
+
+.controls{
+  display:flex;
+  gap:8px;
+  margin-top:6px;
+}
+
+button{
+  background: linear-gradient(180deg,#ffffff10,#ffffff06);
+  border:1px solid rgba(255,255,255,0.06);
+  color:var(--text);
+  padding:6px 8px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.instructions{
+  margin-top:12px;
+  font-size:13px;
+  color:#cfd7ffcc;
+  text-align:center;
+}
+
+footer{ text-align:center; margin-top:8px; font-size:13px; color:#9fb0ffcc; }

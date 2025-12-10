@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pac‑Man — Mini Juego</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="wrap">
+    <h1>Pac‑Man (mini)</h1>
+
+    <div class="game-frame">
+      <canvas id="game" width="320" height="320" aria-label="Pacman game"></canvas>
+      <aside class="hud">
+        <div>Score: <span id="score">0</span></div>
+        <div id="status"></div>
+        <div class="controls">
+          <button id="startBtn">Iniciar</button>
+          <button id="pauseBtn">Pausa</button>
+          <button id="resetBtn">Reiniciar</button>
+        </div>
+        <small>Controles: Flechas / WASD</small>
+      </aside>
+    </div>
+
+    <p class="instructions">
+      Come todos los puntos para ganar. Evita a los fantasmas. Puedes pausar con el botón <em>Pausa</em>.
+    </p>
+
+    <footer>
+      <a href="../">Volver</a>
+    </footer>
+  </main>
+
+  <script src="pacman.js" defer></script>
+</body>
+</html>
