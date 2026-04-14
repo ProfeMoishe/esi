@@ -274,7 +274,7 @@
         updateScore();
         if (countRemainingDots() === 0){
           running = false;
-          statusEl.textContent = '¡Ganaste!';
+          statusEl.textContent = '¡¡¡¡¡¡¡GANASTE!!!!!!!';
         }
       }
     }
