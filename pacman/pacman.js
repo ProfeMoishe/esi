@@ -1,4 +1,4 @@
-// Pac‑Man mini — single file game logic (CORREGIDO)
+// Pac‑Man mini — con Power Pellets y Música
 (() => {
   const canvas = document.getElementById('game');
   let ctx = canvas.getContext('2d');
@@ -15,9 +15,9 @@
   const W = TILE * COLS;
   const H = TILE * ROWS;
 
-  // TRES MAPAS COMPLETOS
+  // MAPAS COMPLETOS
   const rawMaps = [
-    // Map 1 (original)
+    // Map 1
     [
       "11111111111111111111",
       "10000000001100000001",
@@ -40,7 +40,7 @@
       "10000000000000000001",
       "11111111111111111111"
     ],
-    // Map 2 (más abierto)
+    // Map 2
     [
       "11111111111111111111",
       "10000000000000000001",
@@ -63,7 +63,7 @@
       "10000000000000000001",
       "11111111111111111111"
     ],
-    // Map 3 (laberinto alternativo)
+    // Map 3
     [
       "11111111111111111111",
       "10001000100010001001",
@@ -91,6 +91,126 @@
   let currentMapIndex = parseInt(mapSelect.value || '0', 10);
   let map = rawMaps[currentMapIndex].map(r => r.split('').map(ch => +ch));
 
+  // CONFIGURACIÓN DE AUDIO (Web Audio API)
+  let audioContext = null;
+  let isMusicPlaying = false;
+  let currentOscillator = null;
+  let currentGain = null;
+
+  function initAudio() {
+    if (audioContext) return;
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+
+  // Reproducir sonido simple (para power pellet, comer fantasma, etc)
+  function playTone(frequency, duration, volume = 0.3) {
+    if (!audioContext) return;
+    
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+    
+    oscillator.frequency.value = frequency;
+    gain.gain.value = volume;
+    
+    oscillator.start();
+    gain.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + duration);
+    oscillator.stop(audioContext.currentTime + duration);
+  }
+
+  // Música de fondo simple (melodía de Pacman)
+  function startBackgroundMusic() {
+    if (!audioContext || isMusicPlaying) return;
+    
+    isMusicPlaying = true;
+    
+    function playNote(freq, duration, time) {
+      const osc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      osc.connect(gain);
+      gain.connect(audioContext.destination);
+      osc.frequency.value = freq;
+      gain.gain.value = 0.15;
+      osc.start(time);
+      gain.gain.exponentialRampToValueAtTime(0.00001, time + duration);
+      osc.stop(time + duration);
+    }
+    
+    // Melodía simple del Pacman (bucle)
+    const melody = [
+      {freq: 261.63, duration: 0.3}, // C
+      {freq: 329.63, duration: 0.3}, // E
+      {freq: 392.00, duration: 0.3}, // G
+      {freq: 523.25, duration: 0.4}, // C5
+      {freq: 392.00, duration: 0.3}, // G
+      {freq: 329.63, duration: 0.3}, // E
+      {freq: 261.63, duration: 0.6}  // C
+    ];
+    
+    let currentTime = audioContext.currentTime;
+    
+    function playLoop() {
+      if (!isMusicPlaying) return;
+      currentTime = audioContext.currentTime;
+      
+      for (let i = 0; i < melody.length; i++) {
+        playNote(melody[i].freq, melody[i].duration, currentTime + (i * 0.35));
+      }
+      
+      setTimeout(() => {
+        if (isMusicPlaying) playLoop();
+      }, melody.length * 350);
+    }
+    
+    playLoop();
+  }
+
+  function stopBackgroundMusic() {
+    isMusicPlaying = false;
+  }
+
+  // Power Pellets
+  let powerPellets = [];
+  let frightenedMode = false;
+  let frightenedTimer = 0;
+  const FRIGHTENED_DURATION = 8000; // 8 segundos
+
+  function resetPowerPellets() {
+    powerPellets = [];
+    // Posiciones fijas para power pellets (esquinas del mapa)
+    const powerPositions = [
+      {x: 1, y: 1}, {x: 18, y: 1},
+      {x: 1, y: 18}, {x: 18, y: 18}
+    ];
+    
+    for (const pos of powerPositions) {
+      if (map[pos.y][pos.x] === 0) {
+        powerPellets.push({x: pos.x, y: pos.y, active: true});
+      }
+    }
+  }
+
+  // Dots (incluyendo puntos normales)
+  let dots = [];
+  function resetDots() {
+    dots = [];
+    for (let y = 0; y < ROWS; y++) {
+      dots[y] = [];
+      for (let x = 0; x < COLS; x++) {
+        dots[y][x] = (map[y][x] === 0);
+      }
+    }
+    
+    // Remover dots donde hay power pellets
+    for (const pellet of powerPellets) {
+      if (pellet.active && dots[pellet.y] && dots[pellet.y][pellet.x]) {
+        dots[pellet.y][pellet.x] = false;
+      }
+    }
+  }
+
   // Configuración HiDPI
   function setupCanvas() {
     const DPR = window.devicePixelRatio || 1;
@@ -103,18 +223,6 @@
   }
   setupCanvas();
 
-  // Dots
-  let dots = [];
-  function resetDots() {
-    dots = [];
-    for (let y = 0; y < ROWS; y++) {
-      dots[y] = [];
-      for (let x = 0; x < COLS; x++) {
-        dots[y][x] = (map[y][x] === 0);
-      }
-    }
-  }
-
   // Pacman
   const pac = {
     x: 1, y: 1,
@@ -125,20 +233,26 @@
     speed: 2.0,
     mouth: 0,
     alive: true,
-    radius: 10
+    radius: 10,
+    scoreMultiplier: 1
   };
 
-  // CLASE GHOST CORREGIDA
+  // CLASE GHOST CORREGIDA CON MODO FRIGHTENED
   class Ghost {
-    constructor(x, y, color) {
+    constructor(x, y, color, scaredColor = '#6b6bff') {
       this.x = x;
       this.y = y;
       this.px = x * TILE + TILE/2;
       this.py = y * TILE + TILE/2;
       this.dir = {x: 1, y: 0};
+      this.originalColor = color;
       this.color = color;
+      this.scaredColor = scaredColor;
       this.speed = 1.4;
       this.radius = 10;
+      this.frightened = false;
+      this.respawnX = x;
+      this.respawnY = y;
     }
 
     isCentered() {
@@ -166,6 +280,26 @@
       return valid;
     }
 
+    setFrightened(enabled) {
+      this.frightened = enabled;
+      if (enabled) {
+        this.color = this.scaredColor;
+        this.speed = 1.0; // Más lento cuando están asustados
+      } else {
+        this.color = this.originalColor;
+        this.speed = 1.4;
+      }
+    }
+
+    respawn() {
+      this.x = this.respawnX;
+      this.y = this.respawnY;
+      this.px = this.x * TILE + TILE/2;
+      this.py = this.y * TILE + TILE/2;
+      this.dir = {x: 1, y: 0};
+      this.setFrightened(false);
+    }
+
     update() {
       if (this.isCentered()) {
         const validDirs = this.getValidDirections();
@@ -179,11 +313,17 @@
             if (possibleDirs.length === 0) possibleDirs = validDirs;
           }
           
-          possibleDirs.sort((a, b) => {
-            const distA = Math.abs((this.x + a.x) - pac.x) + Math.abs((this.y + a.y) - pac.y);
-            const distB = Math.abs((this.x + b.x) - pac.x) + Math.abs((this.y + b.y) - pac.y);
-            return distA - distB + (Math.random() - 0.5) * 1.5;
-          });
+          if (this.frightened) {
+            // En modo asustado, movimiento aleatorio
+            possibleDirs.sort(() => Math.random() - 0.5);
+          } else {
+            // IA normal: perseguir a Pacman
+            possibleDirs.sort((a, b) => {
+              const distA = Math.abs((this.x + a.x) - pac.x) + Math.abs((this.y + a.y) - pac.y);
+              const distB = Math.abs((this.x + b.x) - pac.x) + Math.abs((this.y + b.y) - pac.y);
+              return distA - distB;
+            });
+          }
           
           this.dir = possibleDirs[0];
         }
@@ -222,7 +362,9 @@
 
   function resetGame() {
     setupCanvas();
+    resetPowerPellets();
     resetDots();
+    
     pac.x = 1; pac.y = 1;
     pac.px = pac.x * TILE + TILE/2;
     pac.py = pac.y * TILE + TILE/2;
@@ -230,9 +372,13 @@
     pac.nextDir = {x: 0, y: 0};
     pac.alive = true;
     pac.mouth = 0;
+    pac.scoreMultiplier = 1;
     
     ghosts[0] = new Ghost(18, 1, '#ff5b5b');
     ghosts[1] = new Ghost(18, 18, '#5bd6ff');
+    
+    frightenedMode = false;
+    frightenedTimer = 0;
     
     score = 0;
     updateScore();
@@ -267,8 +413,30 @@
     }
   }
 
+  function activateFrightenedMode() {
+    frightenedMode = true;
+    frightenedTimer = FRIGHTENED_DURATION;
+    for (const g of ghosts) {
+      g.setFrightened(true);
+    }
+    playTone(200, 0.2, 0.4);
+    playTone(300, 0.2, 0.4);
+    playTone(400, 0.3, 0.4);
+  }
+
   function update(dt) {
     if (!running || !pac.alive) return;
+    
+    // Actualizar timer del modo asustado
+    if (frightenedMode) {
+      frightenedTimer -= dt;
+      if (frightenedTimer <= 0) {
+        frightenedMode = false;
+        for (const g of ghosts) {
+          g.setFrightened(false);
+        }
+      }
+    }
     
     // Movimiento de Pacman
     attemptTurn();
@@ -292,36 +460,68 @@
       }
     }
     
-    // Comer puntos
+    // Comer puntos normales
     if (isCentered(pac.px, pac.py)) {
       if (dots[pac.y] && dots[pac.y][pac.x]) {
         dots[pac.y][pac.x] = false;
         score += 10;
         updateScore();
+        playTone(523.25, 0.05, 0.15);
         
-        if (countRemainingDots() === 0) {
+        if (countRemainingDots() === 0 && !hasActivePowerPellets()) {
           running = false;
           statusEl.textContent = '¡GANASTE!';
+          playTone(523.25, 0.3, 0.5);
+          playTone(659.25, 0.3, 0.5);
+          playTone(783.99, 0.5, 0.5);
+        }
+      }
+      
+      // Comer power pellets
+      for (let i = 0; i < powerPellets.length; i++) {
+        const pellet = powerPellets[i];
+        if (pellet.active && pac.x === pellet.x && pac.y === pellet.y) {
+          pellet.active = false;
+          score += 50;
+          updateScore();
+          activateFrightenedMode();
+          break;
         }
       }
     }
     
     pac.mouth += dt * 0.01;
     
+    // Actualizar fantasmas
     for (const g of ghosts) {
       g.update();
     }
     
-    // Colisiones
+    // Colisiones con fantasmas
     for (const g of ghosts) {
       const dx = Math.abs(g.px - pac.px);
       const dy = Math.abs(g.py - pac.py);
       const distance = Math.hypot(dx, dy);
       
       if (distance < (pac.radius + g.radius) * 0.8) {
-        pac.alive = false;
-        running = false;
-        statusEl.textContent = 'Perdiste';
+        if (g.frightened) {
+          // Pacman come al fantasma
+          score += 200 * pac.scoreMultiplier;
+          pac.scoreMultiplier *= 2;
+          updateScore();
+          playTone(400, 0.15, 0.5);
+          playTone(500, 0.15, 0.5);
+          playTone(600, 0.2, 0.5);
+          g.respawn();
+        } else {
+          // Pacman muere
+          pac.alive = false;
+          running = false;
+          statusEl.textContent = 'Perdiste';
+          playTone(150, 0.5, 0.6);
+          playTone(100, 0.5, 0.6);
+          stopBackgroundMusic();
+        }
       }
     }
   }
@@ -334,6 +534,10 @@
       }
     }
     return c;
+  }
+
+  function hasActivePowerPellets() {
+    return powerPellets.some(p => p.active);
   }
 
   function draw() {
@@ -352,7 +556,7 @@
       }
     }
     
-    // Puntos
+    // Puntos normales
     ctx.fillStyle = '#ffd35a';
     for (let y = 0; y < ROWS; y++) {
       for (let x = 0; x < COLS; x++) {
@@ -361,6 +565,20 @@
           ctx.arc(x * TILE + TILE/2, y * TILE + TILE/2, 2, 0, Math.PI * 2);
           ctx.fill();
         }
+      }
+    }
+    
+    // Power Pellets (monedas grandes)
+    for (const pellet of powerPellets) {
+      if (pellet.active) {
+        ctx.fillStyle = '#ffaa44';
+        ctx.beginPath();
+        ctx.arc(pellet.x * TILE + TILE/2, pellet.y * TILE + TILE/2, 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#ffdd88';
+        ctx.beginPath();
+        ctx.arc(pellet.x * TILE + TILE/2, pellet.y * TILE + TILE/2, 3, 0, Math.PI * 2);
+        ctx.fill();
       }
     }
     
@@ -373,11 +591,18 @@
     ctx.lineTo(pac.px, pac.py);
     ctx.fill();
     
-    // Fantasmas
+    // Fantasmas (con parpadeo en modo asustado)
     for (const g of ghosts) {
       ctx.save();
       ctx.translate(g.px, g.py);
-      ctx.fillStyle = g.color;
+      
+      // Efecto de parpadeo en modo asustado
+      if (g.frightened && Math.floor(Date.now() / 100) % 2 === 0) {
+        ctx.fillStyle = '#ffffff';
+      } else {
+        ctx.fillStyle = g.color;
+      }
+      
       ctx.beginPath();
       ctx.arc(0, -2, 9, Math.PI, 0);
       ctx.rect(-9, -2, 18, 12);
@@ -427,9 +652,22 @@
       togglePause();
       e.preventDefault();
     }
+    
+    // Tecla M para activar/desactivar música
+    if (key === 'm' || key === 'M') {
+      if (isMusicPlaying) {
+        stopBackgroundMusic();
+      } else {
+        initAudio();
+        startBackgroundMusic();
+      }
+      e.preventDefault();
+    }
   });
 
   startBtn.addEventListener('click', () => {
+    initAudio();
+    startBackgroundMusic();
     running = true;
     statusEl.textContent = 'Jugando';
   });
@@ -438,17 +676,31 @@
   
   resetBtn.addEventListener('click', () => {
     resetGame();
+    if (running) {
+      initAudio();
+      startBackgroundMusic();
+    }
   });
   
   mapSelect.addEventListener('change', (e) => {
     const idx = parseInt(e.target.value, 10) || 0;
     loadMap(idx);
+    if (running) {
+      initAudio();
+      startBackgroundMusic();
+    }
   });
   
   function togglePause() {
     if (!pac.alive) return;
     running = !running;
     statusEl.textContent = running ? 'Jugando' : 'Pausado';
+    if (running) {
+      initAudio();
+      startBackgroundMusic();
+    } else {
+      stopBackgroundMusic();
+    }
   }
   
   // Iniciar juego
